@@ -17,9 +17,6 @@ class App extends Component {
   }
 }
 
-/* let mapStateToProps = (state) => ({
-  initialized: state.app.initialized,
-}); */
 
 
 

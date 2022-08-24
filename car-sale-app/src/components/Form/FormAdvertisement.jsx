@@ -3,10 +3,7 @@ import { useFormik } from "formik";
 import Form from 'react-bootstrap/Form';
 import classes from "../Form/form.module.css";
 
-
 const FormAdvertisement = () => {
-  
-
 
 
   const formik = useFormik({
