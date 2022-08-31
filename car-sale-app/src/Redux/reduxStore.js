@@ -1,6 +1,7 @@
 import { combineReducers} from "redux";
 import reducerFormAdv from '../Redux/reducerFormAdv';
-import { createStore } from 'redux';
+import { createStore,applyMiddleware  } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
 let reducers= combineReducers({
  
@@ -8,7 +9,6 @@ let reducers= combineReducers({
   
 
 });
-const store = createStore(reducers)
-console.log(store.getState())
+const store = createStore(reducers, applyMiddleware(thunkMiddleware))
  window.store=store;
 export default store;               
