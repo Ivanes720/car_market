@@ -7,8 +7,7 @@ import {
   setMark,
   setModel,
   setRegion,
-} from "../../Redux/reducerFormAdv";
-import {
+  setValues,
   requestCars,
   requestMark,
   requestModel,
@@ -16,6 +15,7 @@ import {
 } from "../../Redux/reducerFormAdv";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { requestIds } from "../../Redux/reducerCardPage";
 const FormAdvertisement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,29 +32,39 @@ const FormAdvertisement = () => {
     dispatch(requestCars(setCars));
   }, []);
   useEffect(() => {
-    dispatch(requestRegion(setRegion));
-  }, []);
-  useEffect(() => {
     dispatch(requestMark(typeValue, setMark));
-  }, []);
+  }, [typeValue]);
   useEffect(() => {
     dispatch(requestModel(typeValue, markValue, setModel));
   });
-
+  useEffect(() => {
+    dispatch(requestRegion(setRegion));
+  }, [markValue]);
   const formik = useFormik({
     initialValues: {
-      typeOfVehicle: "",
-      brand: "",
-      model: "",
-      VerifiedVin: false,
-      region: "",
-      year_at: "",
-      year_to: "",
-      price_at: "",
-      price_to: "",
+      category_id: null,
+      marka_id: null,
+      model_id: null,
+      verifiedVIN: null,
+      state: null,
+      s_yers: null,
+      po_yers: null,
+      price_ot: null,
+      price_do: null,
     },
     onSubmit: (values) => {
-      console.log(values);
+      dispatch(
+        requestIds(
+          values.category_id,
+          values.model_id,
+          values.marka_id,
+          values.state,
+          values.s_yers,
+          values.po_yers,
+          values.price_ot,
+          values.price_do
+        )
+      );
     },
   });
 
@@ -66,7 +76,7 @@ const FormAdvertisement = () => {
       <div>
         <Form.Label>Type of vehicle</Form.Label>
         <Form.Select
-          name="typeOfVehicle"
+          name="category_id"
           //onChange={formik.handleChange}
           size="sm"
           onChange={(e) => {
@@ -83,7 +93,7 @@ const FormAdvertisement = () => {
         </Form.Select>
         <Form.Label>Mark</Form.Label>
         <Form.Select
-          name="brand"
+          name="marka_id"
           onChange={(e) => {
             setMarkValue(e.target.value);
             formik.handleChange(e);
@@ -99,7 +109,7 @@ const FormAdvertisement = () => {
         </Form.Select>
         <Form.Label>Model</Form.Label>
         <Form.Select
-          name="model"
+          name="model_id"
           onChange={(e) => {
             formik.handleChange(e);
           }}
@@ -123,7 +133,7 @@ const FormAdvertisement = () => {
 
       <div className={classes.gridchildelement}>
         <Form.Label>Region</Form.Label>
-        <Form.Select name="region" onChange={formik.handleChange} size="sm">
+        <Form.Select name="state" onChange={formik.handleChange} size="sm">
           <option>Region</option>
           {advertisementPage.region.map((obj) => (
             <option key={obj.value} value={obj.value}>
@@ -136,7 +146,7 @@ const FormAdvertisement = () => {
           onChange={formik.handleChange}
           placeholder="min. year"
           min="1990"
-          name="year_at"
+          name="s_yers"
           type="number"
           id="year_at"
         />
@@ -144,7 +154,7 @@ const FormAdvertisement = () => {
           onChange={formik.handleChange}
           placeholder="max. year"
           min="0"
-          name="year_to"
+          name="po_yers"
           type="number"
           id="year_to"
         />
@@ -153,7 +163,7 @@ const FormAdvertisement = () => {
           onChange={formik.handleChange}
           placeholder="min. price"
           min="0"
-          name="price_at"
+          name="price_ot"
           type="number"
           id="price_at"
         />
@@ -161,13 +171,30 @@ const FormAdvertisement = () => {
           onChange={formik.handleChange}
           placeholder="max. price"
           min="0"
-          name="price_to"
+          name="price_do"
           type="number"
           id="price_to"
         />
       </div>
       <div>
-        <button onClick={routeChange} type="submit">
+        <button
+          onClick={(e) => {
+            dispatch(
+              requestIds(
+                formik.values.category_id,
+                formik.values.model_id,
+                formik.values.marka_id,
+                formik.values.state,
+                formik.values.s_yers,
+                formik.values.po_yers,
+                formik.values.price_ot,
+                formik.values.price_do
+              )
+            );
+            routeChange(e);
+          }}
+          type="submit"
+        >
           Submit
         </button>
       </div>
