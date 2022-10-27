@@ -45,7 +45,7 @@ export const apiForCard = {
         `https://developers.ria.com/auto/search?api_key=udjpgRF2gjAOp6ov2xYgOEcXLwXxpeFuN5JuUbjs&category_id=${category}&marka_id[0]=${marka}&model_id[0]=${model}&state[0]=${state}&s_yers[0]=${sYears}&po_yers[0]=${poYears}&price_ot=${priceOt}&price_do=${priceDo}`
       ).then((response) => {
         if ( response.status===200)
-        return  response.data.result.search_result.ids
+        return  response.data.result.search_result
         
       });
   },
@@ -63,8 +63,7 @@ export const apiForCard = {
       .get(
         `https://developers.ria.com/auto/info?api_key=udjpgRF2gjAOp6ov2xYgOEcXLwXxpeFuN5JuUbjs&auto_id=${id}`
       ).then((response) => {
-        return console.log(response);
-        
-      });
+        return response;
+              });
   }
 };

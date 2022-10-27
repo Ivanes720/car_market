@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import classes from "../Form/form.module.css";
 import {
   setCars,
   setMark,
   setModel,
-  setRegion,
-  setValues,
-  requestCars,
+  setValues } from "../../Redux/actions"
+  import {requestCars,
   requestMark,
   requestModel,
   requestRegion,
@@ -22,6 +21,12 @@ const FormAdvertisement = () => {
   const advertisementPage = useSelector((state) => state.advertisementPage);
   const [typeValue, setTypeValue] = useState();
   const [markValue, setMarkValue] = useState();
+  const [modelValue, setModelValue] = useState();
+  const [regionValue, setRegionValue] = useState();
+  const [minYearValue, setMinYearValue] = useState();
+  const [maxYearValue, setMaxYearValue] = useState();
+  const [minPriceValue, setMinPriceValue] = useState();
+  const [maxPriceValue, setMaxPriceValue] = useState();
 
   const routeChange = () => {
     let path = `/cardOfCar`;
@@ -36,170 +41,144 @@ const FormAdvertisement = () => {
   }, [typeValue]);
   useEffect(() => {
     dispatch(requestModel(typeValue, markValue, setModel));
-  });
-  useEffect(() => {
-    dispatch(requestRegion(setRegion));
   }, [markValue]);
-  const formik = useFormik({
-    initialValues: {
-      category_id: null,
-      marka_id: null,
-      model_id: null,
-      verifiedVIN: null,
-      state: null,
-      s_yers: null,
-      po_yers: null,
-      price_ot: null,
-      price_do: null,
-    },
-    onSubmit: (values) => {
-      dispatch(
-        requestIds(
-          values.category_id,
-          values.model_id,
-          values.marka_id,
-          values.state,
-          values.s_yers,
-          values.po_yers,
-          values.price_ot,
-          values.price_do
-        )
-      );
-    },
-  });
+  useEffect(() => {
+    dispatch(requestRegion());
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+       dispatch(
+      requestIds(
+        typeValue,
+        markValue,
+        modelValue,
+        regionValue,
+        minYearValue,
+        maxYearValue,
+        minPriceValue,
+        maxPriceValue
+      )
+    );
+    routeChange();
+  };
 
   return (
-    <Form
-      onSubmit={formik.handleSubmit}
-      className={classes.gridcontainerelement}
-    >
+    <Form className={classes.gridcontainerelement} onSubmit={handleSubmit}>
       <div>
-        <Form.Label>Type of vehicle</Form.Label>
         <Form.Select
-          name="category_id"
-          //onChange={formik.handleChange}
+        variant="dark"
           size="sm"
           onChange={(e) => {
+            dispatch(setValues(e.target.value));
             setTypeValue(e.target.value);
-            formik.handleChange(e);
           }}
         >
-          <option>Type of vehicle</option>
+          <option>Категория</option>
           {advertisementPage.typeCars.map((obj) => (
             <option key={obj.value} value={obj.value}>
               {obj.name}
             </option>
           ))}
         </Form.Select>
-        <Form.Label>Mark</Form.Label>
+        <br />
         <Form.Select
-          name="marka_id"
           onChange={(e) => {
             setMarkValue(e.target.value);
-            formik.handleChange(e);
           }}
           size="sm"
         >
-          <option>Mark</option>
+          <option>Марка авто</option>
           {advertisementPage.markCars.map((obj) => (
             <option key={obj.value} value={obj.value}>
               {obj.name}
             </option>
           ))}
         </Form.Select>
-        <Form.Label>Model</Form.Label>
+        <br />
+
         <Form.Select
-          name="model_id"
-          onChange={(e) => {
-            formik.handleChange(e);
-          }}
           size="sm"
+          onChange={(e) => {
+            setModelValue(e.target.value);
+          }}
         >
-          <option>Model</option>
+          <option>Модель</option>
           {advertisementPage.modelCars.map((obj) => (
             <option key={obj.value} value={obj.value}>
               {obj.name}
             </option>
-          ))}{" "}
+          ))}
         </Form.Select>
-        <Form.Check
-          onChange={formik.handleChange}
-          type="switch"
-          id="custom-switch"
-          label="VerifiedVin"
-          name="VerifiedVin"
-        />
-      </div>
-
-      <div className={classes.gridchildelement}>
-        <Form.Label>Region</Form.Label>
-        <Form.Select name="state" onChange={formik.handleChange} size="sm">
-          <option>Region</option>
+        <br />
+        <Form.Select
+          onChange={(e) => {
+            setRegionValue(e.target.value);
+          }}
+          size="sm"
+        >
+          <option>Регион</option>
           {advertisementPage.region.map((obj) => (
             <option key={obj.value} value={obj.value}>
               {obj.name}
             </option>
           ))}
         </Form.Select>
-        <Form.Label>Year</Form.Label>
+        <br />
+      </div>
+      <div>
         <Form.Control
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            setMinYearValue(e.target.value);
+          }}
           placeholder="min. year"
           min="1990"
-          name="s_yers"
           type="number"
           id="year_at"
+          size="sm"
         />
+        <br />
         <Form.Control
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            setMaxYearValue(e.target.value);
+          }}
           placeholder="max. year"
           min="0"
-          name="po_yers"
           type="number"
           id="year_to"
+          size="sm"
         />
-        <Form.Label>Price</Form.Label>
+        <br />
+
         <Form.Control
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            setMinPriceValue(e.target.value);
+          }}
           placeholder="min. price"
           min="0"
-          name="price_ot"
           type="number"
           id="price_at"
+          size="sm"
         />
+        <br />
         <Form.Control
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            setMaxPriceValue(e.target.value);
+          }}
           placeholder="max. price"
           min="0"
           name="price_do"
-          type="number"
           id="price_to"
+          size="sm"
         />
+        <br />
       </div>
-      <div>
-        <button
-          onClick={(e) => {
-            dispatch(
-              requestIds(
-                formik.values.category_id,
-                formik.values.model_id,
-                formik.values.marka_id,
-                formik.values.state,
-                formik.values.s_yers,
-                formik.values.po_yers,
-                formik.values.price_ot,
-                formik.values.price_do
-              )
-            );
-            routeChange(e);
-          }}
-          type="submit"
-        >
-          Submit
-        </button>
+      <div className="d-grid gap-2">
+        <Button type="submit" variant="dark" size="sm">
+          Поиск
+        </Button>
       </div>
     </Form>
   );
 };
-
 export default FormAdvertisement;
