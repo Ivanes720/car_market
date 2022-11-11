@@ -6,9 +6,10 @@ export const SET_REGION = "SET_REGION";
 export const SET_IDS = "SET_IDS";
 export const SET_INFO = "SET_INFO";
 export const SET_PHOTO = "SET_PHOTO";
-export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
-export const SET_TOTAL_CARS_COUNT = "SET_TOTAL_USERS_COUNT";
 export const SET_SELECTED_ID = "SET_SELECTED_ID";
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+export const SET_TOTAL_CARD_COUNT = "SET_TOTAL_CARD_COUNT";
+export const IS_LOADING="IS_LOADING";
 
 export const setCars = (typeCars) => ({
   type: SET_ALL_TYPE_CARS,
@@ -46,4 +47,16 @@ export const setPhoto = (photo) => ({
 export const setId = (selectedId) => ({
   type: SET_SELECTED_ID,
   selectedId,
+});
+export const isLoading = (isLoading) => ({
+  type: IS_LOADING,
+  isLoading,
+});
+export const setCurrentPage = (currentPage) => ({
+  type: SET_CURRENT_PAGE,
+  currentPage,
+});
+export const setTotalCardCount = (totalCardCount) => ({
+  type: SET_TOTAL_CARD_COUNT,
+  count: totalCardCount,
 });
